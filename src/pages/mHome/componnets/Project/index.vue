@@ -9,7 +9,7 @@
     </div>
     <div class="menuM">
       <div class="content">
-        <img :src="project" alt="" class="">
+        <img :src="project" alt="" class="" @click="clickOn">
       </div>
 
     </div>
@@ -28,7 +28,11 @@ export default {
     }
   },
 
-  methods: {},
+  methods: {
+    clickOn() {
+      this.$emit('clickOn')
+    }
+  },
 
   mounted() {
 
@@ -39,12 +43,12 @@ export default {
 .menuProjectWrap {
   width: 320rem;
   height: 256rem;
-  //border-radius: 10rem;
+  border-radius: 10rem;
   overflow: hidden;
   background: #666666;
   position: absolute;
-  top: 801rem;
-  right: 60rem;
+  top: 365rem;
+  right: 100rem;
   .menuTop {
     width: 100%;
     height: 36rem;

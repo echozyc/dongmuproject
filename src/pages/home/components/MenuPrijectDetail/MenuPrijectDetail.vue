@@ -172,8 +172,6 @@ export default {
         this.info = window.info
         this.listData = res.data.data?.article_list?.articles
       }
-
-
     },
 
     toDetail(id, cId) {

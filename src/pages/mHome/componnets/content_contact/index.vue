@@ -2,24 +2,15 @@
   <div class="CAbout">
     <div class="menuTop">
       <div class="icon"></div>
-      <span class="titleText">ABOUT TOMO</span>
+      <span class="titleText">CONTACT</span>
       <div class="rightIcon" @click="clickOff()">
         <img :src="off" alt="">
       </div>
     </div>
     <div class="menuM">
-      <p class="p1" v-html="pageData.post_content"></p>
+      <p class="p1" v-html="post_content"></p>
     </div>
 
-    <div class="bt">
-      <div class="leftImg">
-        <img :src="about" alt="" class="about">
-      </div>
-      <div class="rightImg"  @click="clickOff()">
-        <img :src="shang" alt="" class="shang">
-      </div>
-
-    </div>
 
   </div>
 </template>
@@ -45,21 +36,19 @@ export default {
   methods: {
     async getData() {
       let res = await api['page']({
-        id: 1,
+        id: 2,
       })
       this.pageData = res.data.data
-      this.post_content =  res.data.data.post_content
-      console.log(this.post_content)
-
-      // if (this.post_content !== '') {
-      //   // 替换富文本为rem
-      //   this.post_content = this.post_content.replace(/(\d+)px/g, function(s, t) {
-      //     s = s.replace('px', '');
-      //     var value = parseInt(s) * 0.01; // 100px = 1rem
-      //     return value + "rem";
-      //   });
-      // }
-      console.log(this.post_content)
+      this.post_content = res.data.data.post_content
+      if (this.post_content !== '') {
+        // 替换富文本为rem
+        this.post_content = this.post_content.replace(/(\d+)px/g, function(s, t) {
+          s = s.replace('px', '');
+          var value = parseInt(s) * 0.01; // 100px = 1rem
+          return value + "rem";
+        });
+      }
+      console.log(this.pageData)
     },
 
     clickOff() {
@@ -79,7 +68,7 @@ export default {
 .CAbout {
   width: 650rem;
   //height: 650rem;
-  background: #1A1A1A;
+  background: #ED1C24;
   margin: 71rem auto;
   border-radius: 10rem;
   position: relative;
@@ -132,44 +121,6 @@ export default {
     }
 
   }
-  .bt {
-    width: 100%;
-    height: 150rem;
-    background: #1A1A1A;
-    border-top: 1px solid #fff;
-    box-sizing: border-box;
-    position: relative;
-    .leftImg {
-      width: 100px;
-      height: 24px;
-      position: absolute;
-      top: 28px;
-      left: 20px;
-      .about {
-        width: 100%;
-        height: 100%;
-      }
-    }
-    .rightImg {
-      width: 25px;
-      height: 25px;
-      position: absolute;
-      top: 28px;
-      right: 22px;
-      cursor: pointer;
-      .shang {
-        width: 100%;
-        height: 100%;
-      }
-
-    }
-
-
-
-  }
-
-
-
 }
 
 </style>

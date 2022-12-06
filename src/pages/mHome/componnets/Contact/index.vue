@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="menuM">
-      <div class="content">
+      <div class="content" @click="clickOn()">
         <img :src="contact" alt="" class="">
       </div>
 
@@ -28,7 +28,11 @@ export default {
     }
   },
 
-  methods: {},
+  methods: {
+    clickOn() {
+      this.$emit('clickOn')
+    }
+  },
 
   mounted() {
 

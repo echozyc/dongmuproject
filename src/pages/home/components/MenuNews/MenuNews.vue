@@ -39,6 +39,9 @@
           <div class="itemCont" v-show="i.contShow">
             <p class="title">{{i.post_title}}</p>
             <p v-html="i.post_content"></p>
+            <div class="shangWrap" @click="offItem(i)">
+              <img :src="shang" alt="">
+            </div>
 
           </div>
 <!--          </transition>-->
@@ -62,6 +65,8 @@ export default {
       menuOffOther: new URL('../../../../assets/image/menu-off-other.png', import.meta.url).href,
       menuCont: new URL('../../../../assets/image/menuCont/menuCont.png', import.meta.url).href,
       // news: new URL('../../../../assets/image/news/hs.png', import.meta.url).href,
+      shang: new URL('../../../../assets/image/shang.png', import.meta.url).href,
+
 
       detailShow: false,
       listData: [],
@@ -81,6 +86,9 @@ export default {
         if(n != i) n.contShow = false
       })
       i.contShow = !i.contShow
+    },
+    offItem(i) {
+      i.contShow = false
     },
 
     clickDetailShow() {
@@ -208,6 +216,21 @@ export default {
         /deep/ img {
           max-width: 100% !important;
           height: auto !important;
+        }
+        .shangWrap {
+          width: 100%;
+          height: 30px;
+          //background: #1d39c4;
+          position: relative;
+          margin-bottom: 20px;
+          img {
+            width: 30px !important;
+            height: 30px !important;
+            position: absolute;
+            top: 0;
+            right: 20px;
+            cursor: pointer;
+          }
         }
       }
     }

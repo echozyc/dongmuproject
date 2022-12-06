@@ -9,14 +9,20 @@
     </div>
 
     <div class="menuM">
-      <div class="imgWrap"  v-show="showMenu">
-        <img :src="menuCont" alt="" class="menuContImg">
+      <div class="imgWrap"  v-show="showMenu" @click="ckImg">
+        <img :src="menuCont" alt="" class="menuContImg" >
       </div>
       <div class="menuText">
-        <p>ABOUT</p>
-        <p>PROJECT</p>
-        <p>CONTACT</p>
-        <p>NEWS</p>
+        <p @click="this.$emit('CKABOUT')">ABOUT</p>
+        <p @click="this.$emit('CKPROJECT')">PROJECT</p>
+        <div v-show="secondShow" class="secondList">
+          <p v-for=" i in this.listCat"  @click="ckProjectDetail(i.id)">
+            <img :src="you" alt="" class="you" v-show="i.id == this.ckId">
+            {{i.name}}
+          </p>
+        </div>
+        <p @click="this.$emit('CKCONTACT')">CONTACT</p>
+        <p @click="this.$emit('CKNEWS')">NEWS</p>
       </div>
 
       <div class="menuOther">
@@ -38,8 +44,17 @@
 
 </template>
 <script>
+import {api} from '@/service/api/api'
+
 export default {
   name: 'index',
+
+  props: {
+    secondShow: {
+      type: Boolean,
+      default: false
+    }
+  },
 
   data() {
     return {
@@ -48,8 +63,12 @@ export default {
 
       menuCont: new URL('../../../../assets/image/menuCont/menuCont.png', import.meta.url).href,
       menuAll: new URL('../../../../assets/image/menuCont/mAll.png', import.meta.url).href,
+      you: new URL('../../../../assets/image/you.png', import.meta.url).href,
 
       showMenu: true,
+      listCat: null,
+
+      ckId: 8,
 
     }
   },
@@ -57,11 +76,34 @@ export default {
   methods: {
     ckOff() {
       this.$emit('ckOff')
+    },
+
+    async getAirticleCat() {
+      let res = await api['articleCat']({
+        id: 8,
+      })
+      this.listCat = res.data.data.category_list
+      this.listCat = this.listCat.filter(i => {
+        return !i.delete_time
+      })
+      this.listCat.unshift({id: 8, name: 'All PROJECT'})
+      console.log(    this.listCat)
+    },
+
+    ckProjectDetail(id) {
+      this.ckId = id
+      this.$emit('ckProjectDetail', id)
+      console.log(id)
+    },
+    ckImg() {
+      this.$emit('ckImg')
     }
 
   },
 
   mounted() {
+    this.getAirticleCat()
+
 
   }
 }
@@ -77,6 +119,7 @@ export default {
   left: 30rem;
   border-radius: 10rem;
   overflow: hidden;
+  z-index: 2;
   .menuTop {
     width: 100%;
     height: 36rem;
@@ -144,10 +187,33 @@ export default {
         color: #1A1A1A;
         margin-bottom: 10rem;
       }
+      .secondList {
+        //margin-left:10px;
+        //margin-bottom: 20px;
+        .you {
+          width: 12rem;
+          height: 12rem;
+          float: left;
+          margin-left: -20rem;
+          margin-top: 10rem;
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+        p {
+          font-size: 12rem;
+          cursor: pointer;
+          color: rgba(51,51,51,0.5);
+          &:hover {
+            color: #000;
+          }
+        }
+      }
     }
     .menuOther {
-      width: 150px;
-      height: 20px;
+      width: 150rem;
+      height: 20rem;
       margin-left: 50rem;
       margin-top: 30rem;
       margin-bottom: 30rem;

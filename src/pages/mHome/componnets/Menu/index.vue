@@ -26,8 +26,6 @@
 export default {
   name: 'index',
 
-
-
   data() {
     return {
       menu: new URL('../../../../assets/MImage/menu.gif', import.meta.url).href,

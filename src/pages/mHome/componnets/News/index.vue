@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="menuM">
-      <div class="content">
+      <div class="content" @click="clickOn">
         <img :src="news" alt="" class="">
       </div>
 
@@ -28,7 +28,12 @@ export default {
     }
   },
 
-  methods: {},
+  methods: {
+    clickOn() {
+      this.$emit('clickOn')
+    }
+  },
+
 
   mounted() {
 
@@ -37,14 +42,14 @@ export default {
 </script>
 <style scoped lang="less">
 .menuNewsWrap {
-  width: 380rem;
+  width: 340rem;
   height: 186rem;
   border-radius: 10rem;
   overflow: hidden;
   background: #1A1A1A;
   position: absolute;
-  top: 295rem;
-  right: 70rem;
+  top: 801rem;
+  right: 60rem;
   .menuTop {
     width: 100%;
     height: 36rem;
@@ -87,8 +92,8 @@ export default {
     //border-bottom: 1rem solid #1A1A1A;
     position: relative;
     .content {
-      width: 290rem;
-      height: 110rem;
+      width: 220rem;
+      height: 90rem;
       position: absolute;
       top: 0;
       left: 0;

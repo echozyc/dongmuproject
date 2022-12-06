@@ -15,13 +15,49 @@
 
 
     <div class="cWrap" v-show="!menuShow">
-      <MenuCont @ckOff="ckOff"></MenuCont>
-      <AboutMenu></AboutMenu>
-      <News></News>
-      <Contact></Contact>
-      <Project></Project>
+      <MenuCont @ckOff="ckOff"
+                @ckImg="ckImg"
+                @CKABOUT="this.contentAboutShow = true; this.secondShow = false"
+                @CKCONTACT="this.contentContactShow = true ; this.secondShow = false"
+                @CKNEWS="this.contentNewsShow = true; this.secondShow = false"
+                @CKPROJECT="CKPROJECT"
+                @ckProjectDetail="ckProjectDetail"
+                :secondShow="secondShow"
+      />
 
-      <ContentAbout></ContentAbout>
+      <div class="cShow" v-show="!secondShow">
+        <AboutMenu @clickOn="this.contentAboutShow = true"/>
+        <News @clickOn="this.contentNewsShow = true"/>
+        <Contact @clickOn="this.contentContactShow = true"></Contact>
+        <Project @clickOn="CKPROJECT"></Project>
+
+      </div>
+
+
+      <ContentAbout
+          v-show="contentAboutShow"
+          @clickOff="this.contentAboutShow = false"/>
+
+      <ContentNews
+          v-show="contentNewsShow"
+          @clickOff="this.contentNewsShow = false"/>
+
+      <ContentContact
+          v-show="contentContactShow"
+          @clickOff="this.contentContactShow = false"/>
+
+      <ContentProjectLists
+          v-show="secondShow"
+          @ckDetail="ckDetail"
+          ref="projectLists"
+      />
+
+      <ContentProjectDetail
+          v-show="ContentProjectDetailShow"
+          @clickOff="ContentProjectDetailShow = false"
+          ref="ContentProjectDetail"
+      />
+
 
     </div>
 
@@ -30,6 +66,7 @@
   </div>
 </template>
 <script>
+import {api} from '@/service/api/api'
 import Menu from './componnets/Menu/index.vue'
 import MenuCont from './componnets/MenuCont/index.vue'
 import AboutMenu from './componnets/AboutMenu/index.vue'
@@ -38,7 +75,11 @@ import Contact from './componnets/Contact/index.vue'
 import Project from './componnets/Project/index.vue'
 
 import ContentAbout from './componnets/content_about/index.vue'
+import ContentNews from './componnets/content_news/index.vue'
+import ContentContact from './componnets/content_contact/index.vue'
 
+import ContentProjectLists from './componnets/content_projectLists/index.vue'
+import ContentProjectDetail from './componnets/content_projectDetail/index.vue'
 
 
 export default {
@@ -51,19 +92,31 @@ export default {
     News,
     Contact,
     Project,
-    ContentAbout
+    ContentAbout,
+    ContentNews,
+    ContentContact,
+    ContentProjectLists,
+    ContentProjectDetail
   },
 
   data() {
     return {
       logo: new URL('../../assets/MImage/logo.png', import.meta.url).href,
       bg: new URL('../../assets/MImage/bg.png', import.meta.url).href,
-      menuShow: true
+      menuShow: true,
+      contentAboutShow: false,
+      contentNewsShow: false,
+      contentContactShow: false,
+
+      // cShow: true,
+      secondShow: false,
+      ContentProjectDetailShow: false,
     }
   },
 
   mounted() {
     document.documentElement.style.fontSize =  document.documentElement.clientWidth / 750 + 'px'
+    this.getComDetail()
   },
 
   methods: {
@@ -72,15 +125,41 @@ export default {
     },
     ckOff() {
       this.menuShow = true
-    }
+    },
+    ckProjectDetail(id) {
+      console.log(id)
+      this.$refs.projectLists.getData(id)
 
+    },
+    CKPROJECT() {
+      this.secondShow = !this.secondShow
+      // this.cShow = !this.cShow
+      if(this.secondShow) {
+        this.$refs.projectLists.getData('8')
+      }
+    },
+    ckImg() {
+      this.secondShow = false
+    },
+    ckDetail(val) {
+      this.$refs.ContentProjectDetail.getArticle(val.id, val.cId)
+      this.ContentProjectDetailShow = true
+      console.log(val)
+    },
+
+    async getComDetail() {
+      let res = await api['index']()
+      window.info = res.data.data
+      console.log(window.info)
+    },
   },
 }
 </script>
 <style scoped lang="less">
 .mHomeWrap {
   width: 100%;
-  height: 100%;
+  //height: 100%;
+  min-height: 100%;
   background-color: #E6E5E3;
   background-size: 15rem 15rem, 15rem 15rem;
   background-image:
@@ -117,9 +196,12 @@ export default {
   .cWrap {
     height: calc(100% - 50rem);
     width: 100%;
-    position: relative;
+    position: absolute;
     background: url("../../assets/MImage/bg.png");
     background-size: 100%;
+    padding-bottom: 20rem;
+    box-sizing: border-box;
+    overflow: auto;
 
   }
 }
